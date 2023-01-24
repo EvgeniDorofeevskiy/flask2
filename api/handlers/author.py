@@ -38,6 +38,13 @@ def edit_author(author_id):
     return author.to_dict(), 200
 
 
-@app.route('/authors/<int:author_id>', methods=["PUT"])
-def delete_author(quote_id):
-    raise NotImplemented("Метод не реализован")
+@app.route('/authors/<int:author_id>', methods=["DELETE"])
+def delete_author(author_id):
+    author = AuthorModel.query.get(author_id)
+    if author is None:
+        return f"author with id={author_id} not found", 404
+# если есть цитаты у автора то автор будет удален а цитаты нет
+# в место айди автора появится значение нулл в колонке автора
+    db.session.delete(author)
+    db.session.commit()
+    return {"massege": f"author with id={author_id} has deleted"}, 200
