@@ -21,7 +21,8 @@ def get_quotes(author_id=None, quote_id=None):
     if author_id:  # Если запрос приходит по url: /authors/<int:author_id>/quotes
         author = AuthorModel.query.get(author_id)
         quotes = author.quotes.all()
-        return [quote.to_dict() for quote in quotes], 200  # Возвращаем все цитаты автора
+        # Возвращаем все цитаты автора
+        return [quote.to_dict() for quote in quotes], 200
 
     # Если запрос приходит по url: /quotes/<int:quote_id>
     quote = QuoteModel.query.get(quote_id)
@@ -43,7 +44,7 @@ def create_quote(author_id):
     return quote.to_dict(), 201
 
 
-@app.route('/quotes/<int:id>', methods=["PUT"])
+@app.route('/quotes/<int:quote_id>', methods=["PUT"])
 def edit_quote(quote_id):
     quote_data = request.json
     quote = QuoteModel.query.get(quote_id)

@@ -34,6 +34,7 @@ def edit_author(author_id):
     if author is None:
         return {"Error": f"Author id={author_id} not found"}, 404
     author.name = author_data["name"]
+    db.session.commit()
     return author.to_dict(), 200
 
 
