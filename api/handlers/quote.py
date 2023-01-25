@@ -1,5 +1,5 @@
 from flask import jsonify
-from api import app, db, request, auth
+from api import app, db, request, multi_auth
 from api.models.author import AuthorModel
 from api.models.quote import QuoteModel
 from api.schemas.quote import  quotes_schema, quote_schema
@@ -29,9 +29,9 @@ def get_quotes_by_author_id(author_id):
     return quotes_schema.dump(quotes), 200
 
 @app.route('/authors/<int:author_id>/quotes', methods=["POST"])
-@auth.login_required
+@multi_auth.login_required
 def create_quote(author_id):
-    print("user = ", auth.current_user())
+    print("user = ", multi_auth.current_user())
     quote_data = request.json
     author = AuthorModel.query.get(author_id)
     if author is None:
@@ -44,9 +44,9 @@ def create_quote(author_id):
 
 
 @app.route('/quotes/<int:quote_id>', methods=["PUT"])
-@auth.login_required
+@multi_auth.login_required
 def edit_quote(quote_id):
-    print("user = ", auth.current_user())
+    print("user = ", multi_auth.current_user())
     quote_data = request.json
     quote = QuoteModel.query.get(quote_id)
     if quote is None:
@@ -58,9 +58,9 @@ def edit_quote(quote_id):
 
 
 @app.route('/quotes/<int:quote_id>', methods=["DELETE"])
-@auth.login_required
+@multi_auth.login_required
 def delete_quote(quote_id):
-    print("user = ", auth.current_user())
+    print("user = ", multi_auth.current_user())
     quote = QuoteModel.query.get(quote_id)
     if quote is None:
         return f"quote with id={quote_id} not found", 404

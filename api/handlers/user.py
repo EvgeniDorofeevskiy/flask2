@@ -1,4 +1,4 @@
-from api import app, db, request, auth
+from api import app, db, request, multi_auth
 from api.models.user import UserModel
 from api.schemas.user import user_schema, users_schema
 
@@ -17,9 +17,9 @@ def get_users():
 
 
 @app.post("/users")
-@auth.login_required
+@multi_auth.login_required
 def create_user():
-    print("user = ", auth.current_user())
+    print("user = ", multi_auth.current_user())
     user_data = request.json
     user = UserModel(**user_data)
     db.session.add(user)
@@ -27,9 +27,9 @@ def create_user():
     return user_schema.dump(user), 201
 
 @app.delete("/users/<int:user_id>")
-@auth.login_required
+@multi_auth.login_required
 def delete_user(user_id):
-    print("user = ", auth.current_user())
+    print("user = ", multi_auth.current_user())
     user = UserModel.query.get(user_id)
     if user is None:
         return f"quote with id={user_id} not found", 404
